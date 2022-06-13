@@ -1,4 +1,4 @@
-# Picture-Puzzle
+# Vanilla-Javascript-Picture-Puzzle
 # This game was created for fun as a learning project.
 
 The game is a slidiing picture puzzle game, the goal being to re-arrange the tiles into the correct order with the blank tile at the bottom right of the game board.
