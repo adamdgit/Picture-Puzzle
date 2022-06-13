@@ -23,6 +23,11 @@ main {
   gap:20px;
 }
 
+.step {
+  font-size: 20px;
+  color:rgb(255, 205, 97);
+}
+
 .wrap1 {
   display: flex;
 }

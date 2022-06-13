@@ -17,11 +17,11 @@
 
     <main>
 
-      <h2>1: Upload an image to play with</h2>
+      <span class="step">1. Upload an image to play with</span>
       <input type="file" accept="image/*" id="imgInp">
 
       <div class="wrap1">
-        <label for="tile-count"><h3>2: Choose a board size:</h3></label>
+        <label for="tile-count"><span class="step">2. Choose a board size:</span></label>
         <select name="tile-count" id="tile-count">
           <option value="16" selected>4x4</option>
           <option value="25">5x5</option>
@@ -34,11 +34,11 @@
       
       <canvas id="canvas"></canvas>
 
-      <h3>3: Click a tile adjacent to the blank tile, to swap the tiles</h3>
-      <h3>
-        4: Put the picture back together. 
+      <span class="step">3. Click a tile adjacent to the blank tile, to swap the tiles</span>
+      <span class="step">
+        4. Put the picture back together. 
         A completed picture has the <u>blank tile at the bottom right of the board.</u>
-      </h3>
+      </span>
       <div id="board" class="grid-size16"></div>
 
       <div class="wrap2">
