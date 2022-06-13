@@ -315,6 +315,10 @@ function gameTimer() {
   // simple timer for highscores, max time of 59mins 59secs
   let mins = 0
   let secs = 0
+  // reset timer
+  timerSecs.innerHTML = '00'
+  timerMins.innerHTML = '00'
+
   timer = setInterval(() => {
     secs++
     timerSecs.innerHTML = `0${secs}`
