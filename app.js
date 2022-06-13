@@ -200,10 +200,7 @@ function swapTiles(tileIndex, blank) {
   let tempBlank = blankTile
   let temp = document.createElement('div')
 
-  // replaces blank tile with an empty placeholder div
-  // selected tile is then replaced with blank tile
-  // placehodler div is then replaced with the selected tile
-  // effectively swapping the selected tile & blank tile
+  // Swaps blank tile and selected tile using a temporary variable
   blankTile.replaceWith(temp)
   tile.replaceWith(tempBlank)
   tempBlank.dataset.index = tileIndex
@@ -220,7 +217,7 @@ function swapTiles(tileIndex, blank) {
 
 function checkWinCondition(a, b) {
   // if both arrays are equal return true - user wins
-  return JSON.stringify(a)==JSON.stringify(b);
+  return JSON.stringify(a) == JSON.stringify(b);
 }
 
 function findBlankTile() {
@@ -248,7 +245,7 @@ function shuffleTiles(array) {
   let validMove = []
 
   // make 1000 random valid moves to shuffle the board
-  // moves must be valid otherwise puzzle can be unsolvable
+  // moves must be valid otherwise puzzle can become unsolvable
   for (let i=0; i<1000; i++) {
     // empty valid moves each loop to find new valid moves
     validMove = []
@@ -279,23 +276,24 @@ function shuffleTiles(array) {
 
 function insertHighscoreHTML() {
 
-  // get highscores from local storage
   let score = getHighscoreLS()
+  // compare highscores from lowest to highest
   score.sort((a,b) => (a.Time - b.Time))
-
+  // write highscores to html
   for(let i=0; i<score.length; i++) {
     const li = document.createElement('li')
     document.getElementById('highscore-list').appendChild(li)
-    // time saved in LS as seconds, gets converted into mins + secs
+    // convert score from seconds to mins & seconds
     let seconds = score[i].Time % 60
     if (seconds == 0) seconds = '00' 
     let minutes = Math.floor(score[i].Time / 60)
+    if (seconds < 10) seconds = `0${seconds}`
     li.innerHTML = `Time: ${minutes}:${seconds} - Boardsize: ${score[i].Boardsize} tiles`
   }
 }
 
 function addHighscoreLS(time) {
-  // add score & board size played on to Local Storage
+  // add score & board size played on to Local Storage, time saved as seconds
   const highscore = JSON.parse(localStorage.getItem('highscores')) || []
   let newStorage = { 
     'Time': time,
