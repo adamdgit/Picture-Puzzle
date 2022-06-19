@@ -2,7 +2,7 @@
 # This game was created for fun as a learning project.
 
 The game is a slidiing picture puzzle game, the goal being to re-arrange the tiles into the correct order with the blank tile at the bottom right of the game board.
-There is a timer and highscores saved to your local storage, try and get the best time you can.
+There is a timer and highscores saved to your local storage, try and get the fastest time you can.
 
 How to play:
 1. Upload any image
