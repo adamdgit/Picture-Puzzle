@@ -2,7 +2,6 @@
 
 body {
   background: rgb(47,47,47);
-  background: radial-gradient(circle, rgba(47,47,47,1) 0%, rgba(0,0,0,1) 100%);
   color: #eee;
   height: 100vh;
 }
@@ -18,13 +17,20 @@ header {
 }
 
 main {
+  margin-top: 40px;
+  opacity: 0;
+  transition: 200ms opacity 300ms ease-out;
   display: grid;
   justify-items: center;
   gap:20px;
 }
 
+.show {
+  opacity: 1;
+}
+
 .step {
-  font-size: 20px;
+  font-size: 2rem;
   color:rgb(97, 197, 255);
 }
 
@@ -89,9 +95,17 @@ main {
   display: none;
 }
 
+#imgInp {
+  border: 1px solid white;
+}
+
 #board {
   display: grid;
+  width: 540px;
+  height: 540px;
   cursor: pointer;
+  border:20px solid #fff;
+  border-radius: 10px;
 }
 
 #resized-image {
@@ -108,4 +122,53 @@ main {
 
 .grid-size36{
   grid-template-columns: repeat(6, auto);
+}
+
+/* How to play section */
+.intro {
+  font-size: 1.5rem;
+  border: 3px solid #fff;;
+  padding:40px;
+  display: grid;
+  margin-top: 20%;
+  background-color: #222;
+  justify-items: center;
+  transition: opacity 400ms ease-in;
+  opacity: 1;
+}
+
+.hide-intro {
+  opacity: 0;
+  display: none;
+}
+
+.intro ul li {
+  text-align: left;
+  list-style: none;
+  margin: 20px 0;
+}
+
+.intro button {
+  padding:10px 40px;
+  cursor: pointer;
+  font-size: 2rem;
+  border-radius: 6px;
+  margin-top: 40px;
+}
+
+.intro button:hover {
+  background-color: #67a9ff;
+}
+
+.winMessage {
+  background-color: rgb(255, 255, 255);
+  color: rgb(255, 0, 0);
+  box-shadow: 4px 4px 6px #111;
+  padding:20px;
+  z-index: 9999;
+  position: absolute;
+  bottom:20px;
+  left:50%;
+  transform: translate(-50% , 0);
+  border-radius: 5px;
 }
