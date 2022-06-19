@@ -18,12 +18,20 @@ let tiles = []
 let correctTileLocation = []
 let timer
 
+// hide how to play section, show game board
+document.querySelector('.intro button').addEventListener('click', (e) => {
+  document.querySelector('.intro').classList.add('hide-intro')
+  document.querySelector('.intro').classList.remove('intro')
+  document.querySelector('main').classList.add('show')
+})
+
 insertHighscoreHTML()
 
 // reset & redraw game board when user changes board size
 tileCountEl.addEventListener('change', () => {
   // if a file has been uploaded - redraw
   if (fileIn.files.length != 0) {
+    document.removeEventListener('click', (handleMouseClick))
     changeTileCount()
     clearCanvas()
     stopGame()
@@ -33,12 +41,14 @@ tileCountEl.addEventListener('change', () => {
     startGame()
   // if no file to draw, just update tile count
   } else { 
+    console.log('changed tile count - nothing uploaded')
     changeTileCount()
   }
 })
 
 // get user uploaded file and send to resize function
 fileIn.addEventListener('change', () => {
+  document.removeEventListener('click', (handleMouseClick))
   const reader = new FileReader()
   const selectedFile = fileIn.files[0]
   if (selectedFile) {
@@ -71,6 +81,7 @@ function changeTileCount() {
 }
 
 function resizeImage(img) {
+  
   img.onload = () => {
     canvas.width = width
     canvas.height = height
@@ -166,11 +177,14 @@ function moveTile(element) {
     swapTiles(tileIndex, blank)
     // check if the puzzle has been solved
     if (checkWinCondition(tiles, correctTileLocation)) {
-      alert(`Puzzle completed in: ${timerMins.innerHTML}:${timerSecs.innerHTML}!`)
-      // save time in seconds to local storage
-      let finalTime = (+timerMins.innerHTML * 60) + (+timerSecs.innerHTML)
+      const winMsg = document.createElement('div')
+      document.querySelector('.page-wrap').insertAdjacentElement('beforebegin', winMsg)
+      winMsg.classList.add('winMessage')
+      winMsg.innerHTML = `Puzzle completed in: ${timerMins.innerHTML}:${timerSecs.innerHTML}!`
+      // convert time to seconds only for storage
+      let finalTime = (parseInt(timerMins.innerHTML) * 60) + (parseInt(timerSecs.innerHTML))
       if (timerMins.innerHTML == 0) {
-        finalTime = +timerSecs.innerHTML
+        finalTime = parseInt(timerSecs.innerHTML)
       }
       // add score to local storage
       addHighscoreLS(finalTime)
@@ -285,9 +299,9 @@ function insertHighscoreHTML() {
     document.getElementById('highscore-list').appendChild(li)
     // convert score from seconds to mins & seconds
     let seconds = score[i].Time % 60
-    if (seconds == 0) seconds = '00' 
+    if (seconds == 0) seconds = '00'
     let minutes = Math.floor(score[i].Time / 60)
-    if (seconds < 10) seconds = `0${seconds}`
+    if (seconds < 10 && seconds != 0) seconds = `0${seconds}`
     li.innerHTML = `Time: ${minutes}:${seconds} - Boardsize: ${score[i].Boardsize} tiles`
   }
 }
