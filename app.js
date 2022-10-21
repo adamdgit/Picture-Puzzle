@@ -10,10 +10,11 @@ const fileIn = document.getElementById('imgInp')
 const fileOut = document.getElementById('imgOut')
 const board = document.getElementById('board')
 const resizedImg = document.getElementById('resized-image')
-const highscoreBtn = document.getElementById('highscore')
+const showHighscoresBtn = document.getElementById('show-btn')
+const hideHighscoresBtn = document.getElementById('hide-btn')
 const blankTile = 'blank'
-let width = 500
-let height = 500
+const width = 500
+const height = 500
 let tiles = []
 let correctTileLocation = []
 let timer
@@ -59,15 +60,14 @@ fileIn.addEventListener('change', () => {
 })
 
 // show/hide highscores
-highscoreBtn.addEventListener('click', () => {
+showHighscoresBtn.addEventListener('pointerdown', () => {
   const highscoreEl = document.querySelector('.highscore-wrap')
-  if (highscoreEl.classList.contains('hide')) {
-    highscoreEl.classList.remove('hide')
-    highscoreBtn.innerHTML = 'Hide Highscores'
-  } else {
-    highscoreEl.classList.add('hide')
-    highscoreBtn.innerHTML = 'Show Highscores'
-  }
+  highscoreEl.classList.remove('hide')
+})
+
+hideHighscoresBtn.addEventListener('pointerdown', () => {
+  const highscoreEl = document.querySelector('.highscore-wrap')
+  highscoreEl.classList.add('hide')
 })
 
 function changeTileCount() {
@@ -88,6 +88,7 @@ function resizeImage(img) {
     // resize user uploaded image to 500x500px
     ctx.drawImage(img,0,0,width,height)
     resizedImg.src = canvas.toDataURL()
+    resizedImg.style.width = "300px"
     // must wait for image to load before sending to drawTiles()
     resizedImg.addEventListener('load', () => {
       clearCanvas()
@@ -170,11 +171,12 @@ function moveTile(element) {
   let validCol = blank % COLUMNS
   let validRow = Math.floor(blank / ROWS)
   let tileIndex = +element.dataset.index
-
+  let [bool, direction] = validMove(blank, tileIndex, validCol, validRow)
+  console.log(bool, direction)
   // return true or false if a selected tile is a valid move
-  if (validMove(blank, tileIndex, validCol, validRow)) {
+  if (bool === true) {
     // swap elements and update tiles array
-    swapTiles(tileIndex, blank)
+    swapTiles(tileIndex, blank, direction)
     // check if the puzzle has been solved
     if (checkWinCondition(tiles, correctTileLocation)) {
       const winMsg = document.createElement('div')
@@ -196,37 +198,64 @@ function moveTile(element) {
 }
 
 function validMove(blank, tileIndex, validCol, validRow) {
+  let direction = ''
+  // check direction
+  if (tileIndex % COLUMNS === validCol && blank +ROWS === tileIndex) direction = 'up'
+  if (tileIndex % COLUMNS === validCol && blank -ROWS === tileIndex) direction = 'down'
+  if (Math.floor(tileIndex / ROWS) === validRow && blank +1 === tileIndex) direction = 'left'
+  if (Math.floor(tileIndex / ROWS) === validRow && blank -1 === tileIndex) direction = 'right'
   // user selected tile must be in the same Col OR Row
   // AND be an adjacent tile to be a valid move
   if (((tileIndex % COLUMNS === validCol) || (Math.floor(tileIndex / ROWS) === validRow)) 
   && ((blank +1 === tileIndex) || (blank -1 === tileIndex)
   || (blank +ROWS === tileIndex) || (blank -ROWS=== tileIndex))) {
-    return true
+    return [true, direction] 
   } else {
-    return false
+    return [false, direction]
   }
 }
 
-function swapTiles(tileIndex, blank) {
+function swapTiles(tileIndex, blank, direction) {
   let tile = document.querySelector(`[data-index='${tileIndex}'`)
   let blankTile = document.querySelector(`[data-index='${blank}'`)
   let tempTile = tile
-  let tempBlank = blankTile
   let temp = document.createElement('div')
 
-  // Swaps blank tile and selected tile using a temporary variable
-  blankTile.replaceWith(temp)
-  tile.replaceWith(tempBlank)
-  tempBlank.dataset.index = tileIndex
-  temp.replaceWith(tempTile)
-  tempTile.dataset.index = blank
+  //animate tile
+  tile.classList.add('animate')
+  // set either x or y depending on which position we need to move the tile
+  switch (direction) {
+    case 'left':
+      tile.style.setProperty('--x', '-100%')
+      break;
+   case 'right':
+      tile.style.setProperty('--x', '100%')
+      break;
+    case 'up':
+      tile.style.setProperty('--y', '-100%')
+      break;
+    case 'down':
+      tile.style.setProperty('--y', '100%')
+      break; 
+  }
+
+  const waitForAnimation = setTimeout(() => {
+    // reset x & y each move to prevent wierd animations
+    tile.classList.remove('animate')
+    tile.style.setProperty('--x', '')
+    tile.style.setProperty('--y', '')
+    // Swaps blank tile and selected tile using a temporary div
+    blankTile.replaceWith(temp)
+    tile.replaceWith(blankTile)
+    temp.replaceWith(tempTile)
+    blankTile.dataset.index = tileIndex
+    tempTile.dataset.index = blank
+    clearTimeout(waitForAnimation)
+  }, 60)
 
   // update tiles array with new tile index after swapping
-  let temp2 = tiles[tileIndex]
-  tiles[tileIndex] = tiles[blank]
-  tiles[blank] = temp2
-
-  return tiles
+  return [tiles[tileIndex], tiles[blank]] = 
+  [tiles[blank], tiles[tileIndex]]
 }
 
 function checkWinCondition(a, b) {
@@ -255,7 +284,7 @@ function shuffleTiles(array) {
   let blank = array.length -1
   let validCol = blank % COLUMNS
   let validRow = Math.floor(blank / ROWS)
-  let randomIndex = blank -1;
+  let randomIndex = blank -1; // first move not random
   let validMove = []
 
   // make 1000 random valid moves to shuffle the board
