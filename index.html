@@ -21,13 +21,13 @@
         <li>4. Try get the fastest time you can! Good luck.</li>
       </ul>
       <img src="tutorial.gif" alt="GIF demonstrating how to slide a tile" width="400px" />
-      <button>Start Game</button>
+      <button>Start</button>
     </div>
 
     <main>
 
       <div class="wrap1">
-        <label for="tile-count"><span class="step">1. Choose a board size:</span></label>
+        <label for="tile-count"><span class="step">Choose board size:</span></label>
         <select name="tile-count" id="tile-count">
           <option value="16" selected>4x4</option>
           <option value="25">5x5</option>
@@ -35,11 +35,16 @@
         </select>
       </div>
 
-      <span class="step">2. Choose an image</span>
       <input type="file" accept="image/*" id="imgInp">
 
-      <img id="imgOut" src="" alt="user uploaded image" />
-      <img id="resized-image" src="" alt="resized user uploaded image"/>
+      <div class="image-edit-wrap">
+        <div class="edit-window"></div>
+        <img id="imgOut" src="" alt="user uploaded image" />
+      </div>
+
+      <h2>Puzzle preview:</h2>
+      <img id="resized-image" alt="resized user uploaded image"/>
+      <button class="start-game-btn">Start Game!</button>
       
       <canvas id="canvas"></canvas>
 
