@@ -2,6 +2,9 @@ const tileCountEl = document.getElementById('tile-count')
 let TILE_COUNT = tileCountEl.value
 let COLUMNS = Math.sqrt(TILE_COUNT)
 let ROWS = Math.sqrt(TILE_COUNT)
+const editWrapper = document.querySelector('.image-edit-wrap')
+const editWindow = document.querySelector('.edit-window')
+const startBtn = document.querySelector('.start-game-btn')
 const timerSecs = document.getElementById('timer-secs')
 const timerMins = document.getElementById('timer-mins')
 const canvas = document.getElementById('canvas')
@@ -13,11 +16,13 @@ const resizedImg = document.getElementById('resized-image')
 const showHighscoresBtn = document.getElementById('show-btn')
 const hideHighscoresBtn = document.getElementById('hide-btn')
 const blankTile = 'blank'
-const width = 500
-const height = 500
+const width = 400
+const height = 400
 let tiles = []
 let correctTileLocation = []
 let timer
+let canvasX, canvasY = 0
+let windowRelativeSize = 0
 
 // hide how to play section, show game board
 document.querySelector('.intro button').addEventListener('click', (e) => {
@@ -70,6 +75,16 @@ hideHighscoresBtn.addEventListener('pointerdown', () => {
   highscoreEl.classList.add('hide')
 })
 
+startBtn.addEventListener('pointerdown', () => {
+  if (!resizedImg.src) return console.error('No image selected')
+  clearCanvas()
+  stopGame()
+  drawTiles(resizedImg)
+  shuffleTiles(tiles)
+  insertTilesHTML()
+  startGame()
+})
+
 function changeTileCount() {
   TILE_COUNT = tileCountEl.value
   COLUMNS = Math.sqrt(TILE_COUNT)
@@ -81,24 +96,79 @@ function changeTileCount() {
 }
 
 function resizeImage(img) {
-  
-  img.onload = () => {
-    canvas.width = width
-    canvas.height = height
-    // resize user uploaded image to 500x500px
-    ctx.drawImage(img,0,0,width,height)
-    resizedImg.src = canvas.toDataURL()
-    resizedImg.style.width = "300px"
-    // must wait for image to load before sending to drawTiles()
-    resizedImg.addEventListener('load', () => {
-      clearCanvas()
-      stopGame()
-      drawTiles(resizedImg)
-      shuffleTiles(tiles)
-      insertTilesHTML()
-      startGame()
-    })
+  // draw image as 400x400 if small image
+  if (img.naturalWidth < 400) {
+    console.log('true')
+    windowRelativeSize = 400
+    canvas.width = 400
+    canvas.height = 400
+    ctx.drawImage(fileOut, 0, 0, 400, 400)
+    fileOut.src = canvas.toDataURL()
+    canvas.width = 0
+    canvas.height = 0
+    createEditWindow()
   }
+  // draw image normally if it is smaller than the device inner width
+  else if (img.naturalWidth < window.innerWidth && img.naturalWidth > 400) {
+    windowRelativeSize = 400
+    canvas.width = img.naturalWidth
+    canvas.height = img.naturalHeight
+    ctx.drawImage(fileOut, 0, 0, img.naturalWidth, img.naturalHeight)
+    fileOut.src = canvas.toDataURL()
+    canvas.width = 0
+    canvas.height = 0
+    createEditWindow()
+  // else shrink and draw image to fit device width
+  // also calculate editWindow relative size
+  } else {
+    windowRelativeSize = window.innerWidth * (400 / img.naturalWidth)
+    let percent = img.naturalHeight / img.naturalWidth
+    canvas.width = window.innerWidth
+    canvas.height = window.innerWidth * percent
+    ctx.drawImage(fileOut, 0, 0, window.innerWidth, window.innerWidth * percent)
+    fileOut.src = canvas.toDataURL()
+    canvas.width = 0
+    canvas.height = 0
+    createEditWindow()
+  }
+}
+
+function createEditWindow() {
+  editWindow.style.display = 'block'
+  editWindow.style.width = `${windowRelativeSize}px`
+  editWindow.style.height = `${windowRelativeSize}px`
+  editWindow.addEventListener('pointerdown', (e) => {
+    editWindow.style.cursor = 'grabbing'
+    document.addEventListener('pointermove', moveWindow)
+    document.addEventListener('pointerup', setWindow)
+  })
+}
+
+function moveWindow(e) {
+  // set window location around cursor/pointer
+  editWindow.style.setProperty('--left', (e.pageX)+'px')
+  editWindow.style.setProperty('--top', (e.pageY)+'px')
+  // x and y to use in canvas of where to start re-drawing image
+  canvasX = editWindow.getBoundingClientRect().left - editWrapper.getBoundingClientRect().left
+  canvasY = editWindow.getBoundingClientRect().top - editWrapper.getBoundingClientRect().top
+}
+
+function setWindow() {
+  cropImage()
+  console.log('window set')
+  document.removeEventListener('pointermove', moveWindow)
+  document.removeEventListener('pointerup', setWindow)
+  editWindow.style.cursor = 'grab'
+}
+
+function cropImage() {
+  canvas.width = 400
+  canvas.height = 400
+  ctx.drawImage(fileOut, canvasX, canvasY, windowRelativeSize, windowRelativeSize, 0, 0, 400, 400)
+  resizedImg.src = canvas.toDataURL()
+  resizedImg.style.width = "400px"
+  canvas.width = 0
+  canvas.height = 0
 }
 
 function drawTiles(img) {
@@ -172,7 +242,6 @@ function moveTile(element) {
   let validRow = Math.floor(blank / ROWS)
   let tileIndex = +element.dataset.index
   let [bool, direction] = validMove(blank, tileIndex, validCol, validRow)
-  console.log(bool, direction)
   // return true or false if a selected tile is a valid move
   if (bool === true) {
     // swap elements and update tiles array
@@ -194,6 +263,10 @@ function moveTile(element) {
     }
   } else {
     console.log('invalid move')
+    board.style.border = '20px solid red'
+    setTimeout(() => {
+      board.style.border = '20px solid white'
+    }, 100)
   }
 }
 
