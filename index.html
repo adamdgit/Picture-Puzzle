@@ -13,12 +13,13 @@
   <div class="page-wrap">
 
     <div class="intro">
-      <h2>How to play:</h2>
+      <h1>How to play:</h1>
       <ul>
-        <li>1. Upload an image, it will be resized and cut into tiles</li>
-        <li>2. Slide the tiles by clicking a tile adjacent to the blank tile.</li>
-        <li>3. Recreate your original image with the blank tile at the bottom right of the board.</li>
-        <li>4. Try get the fastest time you can! Good luck.</li>
+        <li>1. Upload an image, move it within the red box to finalise your puzzle</li>
+        <li>2. Choose a board size</li>
+        <li>3. Slide the tiles by clicking a tile adjacent to the blank tile</li>
+        <li>4. Recreate your original image with the blank tile at the bottom right of the board</li>
+        <li>5. Try get the fastest time you can, good luck!</li>
       </ul>
       <img src="tutorial.gif" alt="GIF demonstrating how to slide a tile" width="400px" />
       <button>Start</button>
@@ -37,12 +38,15 @@
 
       <input type="file" accept="image/*" id="imgInp">
 
+      <span class="step">Move your image within the red box to set your final puzzle</span>
       <div class="image-edit-wrap">
-        <div class="edit-window"></div>
-        <img id="imgOut" src="" alt="user uploaded image" />
+        <img id="imgOut" src="" alt="user uploaded image" draggable="false"/>
       </div>
+      <span class="resize-btns-wrap">
+        <button class="increase">Increse Size +</button>
+        <button class="decrease">Decrease Size -</button>
+      </span>
 
-      <h2>Puzzle preview:</h2>
       <img id="resized-image" alt="resized user uploaded image"/>
       <button class="start-game-btn">Start Game!</button>
       
