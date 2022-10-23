@@ -3,8 +3,9 @@ let TILE_COUNT = tileCountEl.value
 let COLUMNS = Math.sqrt(TILE_COUNT)
 let ROWS = Math.sqrt(TILE_COUNT)
 const editWrapper = document.querySelector('.image-edit-wrap')
-const editWindow = document.querySelector('.edit-window')
 const startBtn = document.querySelector('.start-game-btn')
+const increaseBtn = document.querySelector('.increase')
+const decreaseBtn = document.querySelector('.decrease')
 const timerSecs = document.getElementById('timer-secs')
 const timerMins = document.getElementById('timer-mins')
 const canvas = document.getElementById('canvas')
@@ -22,13 +23,15 @@ let tiles = []
 let correctTileLocation = []
 let timer
 let canvasX, canvasY = 0
-let windowRelativeSize = 0
+let moveX, moveY = 0
+let imgLeftStart, imgTopStart = 0
 
 // hide how to play section, show game board
-document.querySelector('.intro button').addEventListener('click', (e) => {
+document.querySelector('.intro button').addEventListener('click', () => {
   document.querySelector('.intro').classList.add('hide-intro')
   document.querySelector('.intro').classList.remove('intro')
   document.querySelector('main').classList.add('show')
+  document.querySelector('main').style.pointerEvents = 'all'
 })
 
 insertHighscoreHTML()
@@ -60,7 +63,7 @@ fileIn.addEventListener('change', () => {
   if (selectedFile) {
     reader.readAsDataURL(selectedFile)
     reader.onload = selectedFile => fileOut.src = selectedFile.target.result
-    reader.onloadend = () => resizeImage(fileOut)
+    reader.onloadend = () => imageEditor()
   }
 })
 
@@ -73,6 +76,24 @@ showHighscoresBtn.addEventListener('pointerdown', () => {
 hideHighscoresBtn.addEventListener('pointerdown', () => {
   const highscoreEl = document.querySelector('.highscore-wrap')
   highscoreEl.classList.add('hide')
+})
+
+decreaseBtn.addEventListener('pointerdown', () => {
+  canvas.width = fileOut.width
+  canvas.height = fileOut.height
+  ctx.drawImage(fileOut, 0, 0, fileOut.width, fileOut.height, 0, 0, fileOut.width * 0.9, fileOut.height * 0.9)
+  fileOut.src = canvas.toDataURL()
+  canvas.width = 0
+  canvas.height = 0
+})
+
+increaseBtn.addEventListener('pointerdown', () => {
+  canvas.width = fileOut.width * 1.1
+  canvas.height = fileOut.height * 1.1
+  ctx.drawImage(fileOut, 0, 0, fileOut.width, fileOut.height, 0, 0, fileOut.width * 1.1, fileOut.height * 1.1)
+  fileOut.src = canvas.toDataURL()
+  canvas.width = 0
+  canvas.height = 0
 })
 
 startBtn.addEventListener('pointerdown', () => {
@@ -95,62 +116,29 @@ function changeTileCount() {
   if(TILE_COUNT == 36) board.classList.add('grid-size36')
 }
 
-function resizeImage(img) {
-  // draw image as 400x400 if small image
-  if (img.naturalWidth < 400) {
-    console.log('true')
-    windowRelativeSize = 400
-    canvas.width = 400
-    canvas.height = 400
-    ctx.drawImage(fileOut, 0, 0, 400, 400)
-    fileOut.src = canvas.toDataURL()
-    canvas.width = 0
-    canvas.height = 0
-    createEditWindow()
-  }
-  // draw image normally if it is smaller than the device inner width
-  else if (img.naturalWidth < window.innerWidth && img.naturalWidth > 400) {
-    windowRelativeSize = 400
-    canvas.width = img.naturalWidth
-    canvas.height = img.naturalHeight
-    ctx.drawImage(fileOut, 0, 0, img.naturalWidth, img.naturalHeight)
-    fileOut.src = canvas.toDataURL()
-    canvas.width = 0
-    canvas.height = 0
-    createEditWindow()
-  // else shrink and draw image to fit device width
-  // also calculate editWindow relative size
-  } else {
-    windowRelativeSize = window.innerWidth * (400 / img.naturalWidth)
-    let percent = img.naturalHeight / img.naturalWidth
-    canvas.width = window.innerWidth
-    canvas.height = window.innerWidth * percent
-    ctx.drawImage(fileOut, 0, 0, window.innerWidth, window.innerWidth * percent)
-    fileOut.src = canvas.toDataURL()
-    canvas.width = 0
-    canvas.height = 0
-    createEditWindow()
-  }
-}
-
-function createEditWindow() {
-  editWindow.style.display = 'block'
-  editWindow.style.width = `${windowRelativeSize}px`
-  editWindow.style.height = `${windowRelativeSize}px`
-  editWindow.addEventListener('pointerdown', (e) => {
-    editWindow.style.cursor = 'grabbing'
+function imageEditor() {
+  cropImage()
+  fileOut.addEventListener('pointerdown', (e) => {
+    editWrapper.style.cursor = 'grabbing'
+    moveX = e.offsetX
+    moveY = e.offsetY
     document.addEventListener('pointermove', moveWindow)
     document.addEventListener('pointerup', setWindow)
   })
 }
 
 function moveWindow(e) {
-  // set window location around cursor/pointer
-  editWindow.style.setProperty('--left', (e.pageX)+'px')
-  editWindow.style.setProperty('--top', (e.pageY)+'px')
+  // get images left and top values before applying transform
+  let imgLeft = fileOut.getBoundingClientRect().left
+  let imgTop = fileOut.getBoundingClientRect().top
+  let editLeft =  editWrapper.getBoundingClientRect().left
+  let editTop =  editWrapper.getBoundingClientRect().top
+  // calculate img location based on edit window and page offset
+  fileOut.style.left = `${e.pageX - editLeft - moveX}px`
+  fileOut.style.top = `${e.pageY - editTop - moveY}px`
   // x and y to use in canvas of where to start re-drawing image
-  canvasX = editWindow.getBoundingClientRect().left - editWrapper.getBoundingClientRect().left
-  canvasY = editWindow.getBoundingClientRect().top - editWrapper.getBoundingClientRect().top
+  canvasX = editLeft - imgLeft
+  canvasY = editTop - imgTop
 }
 
 function setWindow() {
@@ -158,15 +146,14 @@ function setWindow() {
   console.log('window set')
   document.removeEventListener('pointermove', moveWindow)
   document.removeEventListener('pointerup', setWindow)
-  editWindow.style.cursor = 'grab'
+  editWrapper.style.cursor = 'grab'
 }
 
 function cropImage() {
   canvas.width = 400
   canvas.height = 400
-  ctx.drawImage(fileOut, canvasX, canvasY, windowRelativeSize, windowRelativeSize, 0, 0, 400, 400)
+  ctx.drawImage(fileOut, canvasX, canvasY, 400, 400, 0, 0, 400, 400)
   resizedImg.src = canvas.toDataURL()
-  resizedImg.style.width = "400px"
   canvas.width = 0
   canvas.height = 0
 }
