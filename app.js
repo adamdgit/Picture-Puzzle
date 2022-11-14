@@ -355,7 +355,7 @@ function shuffleTiles(array) {
 
   // make 1000 random valid moves to shuffle the board
   // moves must be valid otherwise puzzle can become unsolvable
-  for (let i=0; i<1000; i++) {
+  for (let i=0; i<1500; i++) {
     // empty valid moves each loop to find new valid moves
     validMove = []
     // swap random tile with blank tile
