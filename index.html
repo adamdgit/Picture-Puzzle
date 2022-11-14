@@ -27,51 +27,55 @@
 
     <main>
 
-      <div class="wrap1">
-        <label for="tile-count"><span class="step">Choose board size:</span></label>
-        <select name="tile-count" id="tile-count">
-          <option value="16" selected>4x4</option>
-          <option value="25">5x5</option>
-          <option value="36">6x6</option>
-        </select>
-      </div>
-
-      <input type="file" accept="image/*" id="imgInp">
-
-      <span class="step">Move your image within the red box to set your final puzzle</span>
-      <div class="image-edit-wrap">
-        <img id="imgOut" src="" alt="user uploaded image" draggable="false"/>
-      </div>
-      <span class="resize-btns-wrap">
-        <button class="increase">Increse Size +</button>
-        <button class="decrease">Decrease Size -</button>
-      </span>
-
-      <img id="resized-image" alt="resized user uploaded image"/>
-      <button class="start-game-btn">Start Game!</button>
-      
-      <canvas id="canvas"></canvas>
-
-      <div id="board" class="grid-size16"></div>
-
-      <div class="wrap2">
-
-        <h2>Time:</h2> 
-        <h2 id="timer-mins">00</h2><h2>:</h2><h2 id="timer-secs">00</h2>
-        <button id="show-btn">Show Highscores</button>
-
-        <div class="highscore-wrap hide">
-          <span class="highscores">
-            <h2>Your Highscores!</h2>
-            <ul id="highscore-list">
-            </ul>
-            <button id="hide-btn">Close</button>
-          </span>
+      <div class="edit-section">
+        <div class="wrap1">
+          <label for="tile-count"><span class="step">Choose board size:</span></label>
+          <select name="tile-count" id="tile-count">
+            <option value="16" selected>4x4</option>
+            <option value="25">5x5</option>
+            <option value="36">6x6</option>
+          </select>
         </div>
+        <span class="step">
+          Upload an image:
+          <input type="file" accept="image/*" id="imgInp" />
+        </span>
+  
+        <span class="step">Move your image within the red box to set your final puzzle</span>
+        <div class="image-edit-wrap">
+          <img id="imgOut" src="" alt="user uploaded image" draggable="false"/>
+        </div>
+        <span class="resize-btns-wrap">
+          <button class="increase">Increse Size +</button>
+          <button class="decrease">Decrease Size -</button>
+        </span>
 
+        <button class="start-game-btn">Start Game!</button>
+      </div>
+
+      <div class="game-section">
+        <img id="resized-image" alt="resized user uploaded image"/>
+        <canvas id="canvas"></canvas>
+
+        <div id="board" class="grid-size16"></div>
+  
+        <div class="wrap2">
+          <h2>Time:</h2> 
+          <h2 id="timer-mins">00</h2><h2>:</h2><h2 id="timer-secs">00</h2>
+          <button id="show-btn">Show Highscores</button>
+          <div class="highscore-wrap hide">
+            <span class="highscores">
+              <h2>Your Highscores!</h2>
+              <ul id="highscore-list">
+              </ul>
+              <button id="hide-btn">Close</button>
+            </span>
+          </div>
+        </div>
       </div>
       
     </main>
+
   </div>
 
 </body>
