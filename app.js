@@ -40,21 +40,8 @@ insertHighscoreHTML()
 
 // reset & redraw game board when user changes board size
 tileCountEl.addEventListener('change', () => {
-  // if a file has been uploaded - redraw
-  if (fileIn.files.length != 0) {
-    document.removeEventListener('click', (handleMouseClick))
-    changeTileCount()
-    clearCanvas()
-    stopGame()
-    drawTiles(resizedImg)
-    shuffleTiles(tiles)
-    insertTilesHTML()
-    startGame()
-  // if no file to draw, just update tile count
-  } else { 
-    console.log('changed tile count - nothing uploaded')
-    changeTileCount()
-  }
+  console.log('changed tile count - nothing uploaded')
+  changeTileCount()
 })
 
 // get user uploaded file and send to resize function
@@ -112,8 +99,6 @@ function startGame() {
   // hide edit section, show game section
   gameSection.style.opacity = '1'
   editSection.style.display = 'none'
-  resizedImg.style.width = "400px"
-  resizedImg.style.height = "400px"
   resizedImg.style.display = "block"
   gameTimer()
   board.addEventListener('click', (handleMouseClick))
@@ -393,18 +378,27 @@ function shuffleTiles(array) {
 function insertHighscoreHTML() {
 
   let score = getHighscoreLS()
+  if (score.length === 0) return
   // compare highscores from lowest to highest
   score.sort((a,b) => (a.Time - b.Time))
-  // write highscores to html
+  // write 10 best highscores to html
   for(let i=0; i<score.length; i++) {
+    if (i > 10) return
+    const span = document.createElement('span')
     const li = document.createElement('li')
-    document.getElementById('highscore-list').appendChild(li)
+    const image = document.createElement('img')
+    document.getElementById('highscore-list').appendChild(span)
+    span.appendChild(li)
+    span.appendChild(image)
+    image.src = score[i].Img
+    image.style.width = "100px"
+    image.style.height = "100px"
     // convert score from seconds to mins & seconds
     let seconds = score[i].Time % 60
     if (seconds == 0) seconds = '00'
     let minutes = Math.floor(score[i].Time / 60)
     if (seconds < 10 && seconds != 0) seconds = `0${seconds}`
-    li.innerHTML = `Time: ${minutes}:${seconds} - Boardsize: ${score[i].Boardsize} tiles`
+    li.innerHTML = `Time: ${minutes}:${seconds} - Board: ${score[i].Boardsize} tiles - Image: `
   }
 }
 
@@ -413,7 +407,8 @@ function addHighscoreLS(time) {
   const highscore = JSON.parse(localStorage.getItem('highscores')) || []
   let newStorage = { 
     'Time': time,
-    'Boardsize': TILE_COUNT
+    'Boardsize': TILE_COUNT,
+    'Img' : resizedImg.src
   }
   highscore.push(newStorage)
   localStorage.setItem('highscores', JSON.stringify(highscore))
