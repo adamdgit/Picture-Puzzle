@@ -7,12 +7,6 @@ body {
   min-height: 100vh;
 }
 
-.page-wrap {
-  display: grid;
-  justify-content: center;
-  text-align: center;
-}
-
 header {
   margin: 30px 0;
 }
@@ -22,6 +16,7 @@ main {
   opacity: 0;
   transition: 200ms opacity 300ms ease-out;
   pointer-events: none;
+  padding-inline: 10px;
 }
 
 button {
@@ -41,6 +36,7 @@ button:hover {
   display: grid;
   place-items: center;
   gap: 1rem;
+  text-align: center;
 }
 
 .game-section {
@@ -89,13 +85,22 @@ button:hover {
   background-color: #333;
   border-radius: 10px;
   padding: 2rem;
+  max-height: 90vh;
+  overflow: auto;
+  text-align: center;
 }
 
-.highscores ul {
+#highscore-list {
   display: grid;
   gap: 1rem;
   font-size: 1.4rem;
   list-style: none;
+}
+
+#highscore-list span {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
 .hide {
@@ -222,6 +227,11 @@ button:hover {
   transform: translate(var(--x), var(--y));
 }
 
+#resized-image {
+  width: 400px;
+  height: 400px;
+}
+
 @media screen and (max-width: 600px) {
   div, img, a, ul, li {
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
@@ -240,5 +250,22 @@ button:hover {
     top:0;
     left: unset;
     transform: unset;
+    font-size: 1.1rem;
+    padding: 10px;
+  }
+
+  .step {
+    font-size: 1.5rem;
+  }
+
+  .image-edit-wrap {
+    touch-action: none;
+    width: 350px;
+    height: 350px;
+  }
+
+  #resized-image {
+    width: 350px;
+    height: 350px;
   }
 }
