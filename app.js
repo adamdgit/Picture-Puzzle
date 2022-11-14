@@ -120,6 +120,7 @@ function changeTileCount() {
 }
 
 function imageEditor() {
+  // get default canvasX & canvasY pos for initial draw
   let imgLeft = fileOut.getBoundingClientRect().left
   let imgTop = fileOut.getBoundingClientRect().top
   let editLeft =  editWrapper.getBoundingClientRect().left
