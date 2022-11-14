@@ -247,6 +247,10 @@ function moveTile(element) {
       document.querySelector('.page-wrap').insertAdjacentElement('beforebegin', winMsg)
       winMsg.classList.add('winMessage')
       winMsg.innerHTML = `Puzzle completed in: ${timerMins.innerHTML}:${timerSecs.innerHTML}!`
+      const showWinMsgTimer = setTimeout(() => {
+        winMsg.remove()
+        clearTimeout(showWinMsgTimer)
+      }, 3000)
       // convert time to seconds only for storage
       let finalTime = (parseInt(timerMins.innerHTML) * 60) + (parseInt(timerSecs.innerHTML))
       if (timerMins.innerHTML == 0) {
@@ -259,8 +263,9 @@ function moveTile(element) {
   } else {
     console.log('invalid move')
     board.style.border = '20px solid red'
-    setTimeout(() => {
+    const wrongMoveTimer = setTimeout(() => {
       board.style.border = '20px solid white'
+      clearTimeout(wrongMoveTimer)
     }, 100)
   }
 }
