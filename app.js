@@ -28,7 +28,7 @@ let canvasX, canvasY = 0
 let moveX, moveY = 0
 let imgLeftStart, imgTopStart = 0
 
-// hide how to play section, show game board
+// hide how to play section, show edit section
 document.querySelector('.intro button').addEventListener('click', () => {
   document.querySelector('.intro').classList.add('hide-intro')
   document.querySelector('.intro').classList.remove('intro')
@@ -38,7 +38,7 @@ document.querySelector('.intro button').addEventListener('click', () => {
 
 insertHighscoreHTML()
 
-// reset & redraw game board when user changes board size
+// change tilecount on click
 tileCountEl.addEventListener('change', () => {
   console.log('changed tile count - nothing uploaded')
   changeTileCount()
@@ -120,6 +120,12 @@ function changeTileCount() {
 }
 
 function imageEditor() {
+  let imgLeft = fileOut.getBoundingClientRect().left
+  let imgTop = fileOut.getBoundingClientRect().top
+  let editLeft =  editWrapper.getBoundingClientRect().left
+  let editTop =  editWrapper.getBoundingClientRect().top
+  canvasX = editLeft - imgLeft
+  canvasY = editTop - imgTop
   cropImage()
   fileOut.addEventListener('pointerdown', (e) => {
     editWrapper.style.cursor = 'grabbing'
@@ -153,6 +159,7 @@ function setWindow() {
 }
 
 function cropImage() {
+  console.log(fileOut)
   canvas.width = 400
   canvas.height = 400
   ctx.drawImage(fileOut, canvasX, canvasY, 400, 400, 0, 0, 400, 400)
