@@ -3,6 +3,8 @@ let TILE_COUNT = tileCountEl.value
 let COLUMNS = Math.sqrt(TILE_COUNT)
 let ROWS = Math.sqrt(TILE_COUNT)
 const editWrapper = document.querySelector('.image-edit-wrap')
+const gameSection = document.querySelector('.game-section')
+const editSection = document.querySelector('.edit-section')
 const startBtn = document.querySelector('.start-game-btn')
 const increaseBtn = document.querySelector('.increase')
 const decreaseBtn = document.querySelector('.decrease')
@@ -106,6 +108,22 @@ startBtn.addEventListener('pointerdown', () => {
   startGame()
 })
 
+function startGame() {
+  // hide edit section, show game section
+  gameSection.style.opacity = '1'
+  editSection.style.display = 'none'
+  resizedImg.style.width = "400px"
+  resizedImg.style.height = "400px"
+  resizedImg.style.display = "block"
+  gameTimer()
+  board.addEventListener('click', (handleMouseClick))
+}
+
+function stopGame() {
+  timer = clearTimeout(timer)
+  board.removeEventListener('click', (handleMouseClick))
+}
+
 function changeTileCount() {
   TILE_COUNT = tileCountEl.value
   COLUMNS = Math.sqrt(TILE_COUNT)
@@ -206,16 +224,6 @@ function insertTilesHTML() {
       board.appendChild(tile)
     }
   })
-}
-
-function startGame() {
-  gameTimer()
-  board.addEventListener('click', (handleMouseClick))
-}
-
-function stopGame() {
-  timer = clearTimeout(timer)
-  board.removeEventListener('click', (handleMouseClick))
 }
 
 function handleMouseClick(e) {
