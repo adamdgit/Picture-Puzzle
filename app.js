@@ -73,12 +73,13 @@ hideHighscoresBtn.addEventListener('pointerdown', () => {
 })
 
 resizeBtn.addEventListener('pointerdown', () => {
+  canvasX = 0
+  canvasY = 0
   canvas.width = width
   canvas.height = height
-  ctx.drawImage(fileOut, 0, 0, fileOut.width, fileOut.height, 0, 0, width, height)
+  ctx.drawImage(fileOut, canvasX, canvasY, fileOut.width, fileOut.height, 0, 0, width, height)
   fileOut.src = canvas.toDataURL()
-  canvas.width = 0
-  canvas.height = 0
+  cropImage()
 })
 
 startBtn.addEventListener('pointerdown', () => {
@@ -158,6 +159,7 @@ function setWindow() {
 function cropImage() {
   canvas.width = width
   canvas.height = height
+  console.log(fileOut, canvasX ,canvasY)
   ctx.drawImage(fileOut, canvasX, canvasY, width, height, 0, 0, width, height)
   resizedImg.src = canvas.toDataURL()
   canvas.width = 0
