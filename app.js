@@ -236,39 +236,50 @@ function handleKeypress(e) {
   let validRow = Math.floor(blank / ROWS)
   let element = 0
 
-  if (e.key === "s") {
-    if ((blank-4) % COLUMNS === validCol && (blank-4) >= 0 ) {
-      console.log('s is a valid move')
-      element = document.querySelector(`[data-index='${blank-4}']`)
-      moveTile(element)
-    } else {
-      console.error('invalid move')
+  // add small delay to each keypress
+  const delay = setTimeout(() => {
+    console.log('press')
+    // W moves tile above DOWN into blank, S moves tile below UP into blank
+    // A moves tile RIGHT of blank into blank, D moves tile LEFT of blank into blank
+    if (e.key === "s") {
+      // check if moving tile down into blank is a valid move
+      if ((blank-4) % COLUMNS === validCol && (blank-4) >= 0 ) {
+        console.log('s is a valid move')
+        element = document.querySelector(`[data-index='${blank-4}']`)
+        moveTile(element)
+      } else {
+        console.error('invalid move')
+      }
+    } else if (e.key === "w") {
+      // check if moving tile up into blank is a valid move
+      if ((blank+4) % COLUMNS === validCol && (blank+4) <= Number(TILE_COUNT -1)) {
+        console.log('w is a valid move')
+        element = document.querySelector(`[data-index='${blank+4}']`)
+        moveTile(element)
+      } else {
+        console.error('invalid move')
+      }
+    } else if (e.key === "d") {
+      // check if moving tile right into blank is a valid move
+      if (Math.floor((blank-1) / ROWS) === validRow) {
+        console.log('d is a valid move')
+        element = document.querySelector(`[data-index='${blank-1}']`)
+        moveTile(element)
+      } else {
+        console.error('invalid move')
+      }
+    } else if (e.key === "a") {
+      // check if moving tile left into blank is a valid move
+      if (Math.floor((blank+1) / ROWS) === validRow) {
+        console.log('a is a valid move')
+        element = document.querySelector(`[data-index='${blank+1}']`)
+        moveTile(element)
+      } else {
+        console.error('invalid move')
+      }
     }
-  } else if (e.key === "w") {
-    if ((blank+4) % COLUMNS === validCol && (blank+4) <= Number(TILE_COUNT -1)) {
-      console.log('w is a valid move')
-      element = document.querySelector(`[data-index='${blank+4}']`)
-      moveTile(element)
-    } else {
-      console.error('invalid move')
-    }
-  } else if (e.key === "d") {
-    if (Math.floor((blank-1) / ROWS) === validRow) {
-      console.log('d is a valid move')
-      element = document.querySelector(`[data-index='${blank-1}']`)
-      moveTile(element)
-    } else {
-      console.error('invalid move')
-    }
-  } else if (e.key === "a") {
-    if (Math.floor((blank+1) / ROWS) === validRow) {
-      console.log('a is a valid move')
-      element = document.querySelector(`[data-index='${blank+1}']`)
-      moveTile(element)
-    } else {
-      console.error('invalid move')
-    }
-  }
+    clearTimeout(delay)
+  }, 60)
 
 }
 
