@@ -19,14 +19,21 @@ const resizedImg = document.getElementById('resized-image')
 const showHighscoresBtn = document.getElementById('show-btn')
 const hideHighscoresBtn = document.getElementById('hide-btn')
 const blankTile = 'blank'
-const width = 400
-const height = 400
+let width = 400
+let height = 400
 let tiles = []
 let correctTileLocation = []
 let timer
 let canvasX, canvasY = 0
 let moveX, moveY = 0
 let imgLeftStart, imgTopStart = 0
+
+// update canvas width/height for small devices
+// same size breakpoint as used in the CSS media query
+if(window.innerWidth <= 600) {
+  width = 350
+  height = 350
+}
 
 // hide how to play section, show edit section
 document.querySelector('.intro button').addEventListener('click', () => {
@@ -40,7 +47,6 @@ insertHighscoreHTML()
 
 // change tilecount on click
 tileCountEl.addEventListener('change', () => {
-  console.log('changed tile count - nothing uploaded')
   changeTileCount()
 })
 
@@ -101,7 +107,8 @@ function startGame() {
   editSection.style.display = 'none'
   resizedImg.style.display = "block"
   gameTimer()
-  board.addEventListener('click', (handleMouseClick))
+  board.addEventListener('click', handleMouseClick)
+  document.addEventListener('keypress', handleKeypress)
 }
 
 function stopGame() {
@@ -153,17 +160,15 @@ function moveWindow(e) {
 
 function setWindow() {
   cropImage()
-  console.log('window set')
   document.removeEventListener('pointermove', moveWindow)
   document.removeEventListener('pointerup', setWindow)
   editWrapper.style.cursor = 'grab'
 }
 
 function cropImage() {
-  console.log(fileOut)
-  canvas.width = 400
-  canvas.height = 400
-  ctx.drawImage(fileOut, canvasX, canvasY, 400, 400, 0, 0, 400, 400)
+  canvas.width = width
+  canvas.height = height
+  ctx.drawImage(fileOut, canvasX, canvasY, width, height, 0, 0, width, height)
   resizedImg.src = canvas.toDataURL()
   canvas.width = 0
   canvas.height = 0
@@ -214,6 +219,7 @@ function insertTilesHTML() {
       let tile = document.createElement('img')
       tile.src = tiles[element]
       tile.dataset.index = tiles.indexOf(index)
+      tile.draggable = false
       board.appendChild(tile)
     }
   })
@@ -223,12 +229,26 @@ function handleMouseClick(e) {
   moveTile(e.target)
 }
 
+function handleKeypress(e) {
+  console.log(e)
+  if (e.key === "w") {
+    let blank = findBlankTile()
+
+  } else if (e.key === "s") {
+
+  } else if (e.key === "a") {
+
+  } else if (e.key === "d") {
+
+  }
+}
+
 function moveTile(element) {
 
   let blank = findBlankTile()
   let validCol = blank % COLUMNS
   let validRow = Math.floor(blank / ROWS)
-  let tileIndex = +element.dataset.index
+  let tileIndex = Number(element.dataset.index)
   let [bool, direction] = validMove(blank, tileIndex, validCol, validRow)
   // return true or false if a selected tile is a valid move
   if (bool === true) {
