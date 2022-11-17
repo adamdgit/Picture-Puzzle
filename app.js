@@ -6,8 +6,7 @@ const editWrapper = document.querySelector('.image-edit-wrap')
 const gameSection = document.querySelector('.game-section')
 const editSection = document.querySelector('.edit-section')
 const startBtn = document.querySelector('.start-game-btn')
-const increaseBtn = document.querySelector('.increase')
-const decreaseBtn = document.querySelector('.decrease')
+const resizeBtn = document.querySelector('.resize')
 const timerSecs = document.getElementById('timer-secs')
 const timerMins = document.getElementById('timer-mins')
 const canvas = document.getElementById('canvas')
@@ -73,19 +72,10 @@ hideHighscoresBtn.addEventListener('pointerdown', () => {
   highscoreEl.classList.add('hide')
 })
 
-decreaseBtn.addEventListener('pointerdown', () => {
-  canvas.width = fileOut.width
-  canvas.height = fileOut.height
-  ctx.drawImage(fileOut, 0, 0, fileOut.width, fileOut.height, 0, 0, fileOut.width * 0.9, fileOut.height * 0.9)
-  fileOut.src = canvas.toDataURL()
-  canvas.width = 0
-  canvas.height = 0
-})
-
-increaseBtn.addEventListener('pointerdown', () => {
-  canvas.width = fileOut.width * 1.1
-  canvas.height = fileOut.height * 1.1
-  ctx.drawImage(fileOut, 0, 0, fileOut.width, fileOut.height, 0, 0, fileOut.width * 1.1, fileOut.height * 1.1)
+resizeBtn.addEventListener('pointerdown', () => {
+  canvas.width = width
+  canvas.height = height
+  ctx.drawImage(fileOut, 0, 0, fileOut.width, fileOut.height, 0, 0, width, height)
   fileOut.src = canvas.toDataURL()
   canvas.width = 0
   canvas.height = 0
