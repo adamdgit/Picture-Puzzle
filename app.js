@@ -77,15 +77,15 @@ resizeBtn.addEventListener('pointerdown', () => {
   canvasY = 0
   canvas.width = width
   canvas.height = height
-  ctx.drawImage(fileOut, canvasX, canvasY, fileOut.width, fileOut.height, 0, 0, width, height)
+  ctx.drawImage(fileOut, 0, 0, fileOut.width, fileOut.height, 0, 0, width, height)
   fileOut.src = canvas.toDataURL()
-  cropImage()
+  setTimeout(() => {
+    cropImage()
+  }, 200)
 })
 
 startBtn.addEventListener('pointerdown', () => {
   if (!resizedImg.src) return console.error('No image selected')
-  clearCanvas()
-  stopGame()
   drawTiles(resizedImg)
   shuffleTiles(tiles)
   insertTilesHTML()
@@ -159,7 +159,6 @@ function setWindow() {
 function cropImage() {
   canvas.width = width
   canvas.height = height
-  console.log(fileOut, canvasX ,canvasY)
   ctx.drawImage(fileOut, canvasX, canvasY, width, height, 0, 0, width, height)
   resizedImg.src = canvas.toDataURL()
   canvas.width = 0
@@ -381,16 +380,6 @@ function findBlankTile() {
   for (let i=0; i<tiles.length; i++) {
     if (tiles[i] === blankTile) return i;
   }
-}
-
-function clearCanvas() {
-  // empty canvas
-  ctx.clearRect(0,0,width,height)
-  // empty tiles array
-  tiles = []
-  correctTileLocation = []
-  // empty html gameboard
-  document.getElementById('board').innerHTML = ''
 }
 
 function shuffleTiles(array) {
