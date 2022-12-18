@@ -88,6 +88,8 @@ resizeBtn.addEventListener('pointerdown', () => {
   canvas.height = height
   ctx.drawImage(fileOut, 0, 0, fileOut.width, fileOut.height, 0, 0, width, height)
   fileOut.src = canvas.toDataURL()
+  fileOut.style.left = `0px`
+  fileOut.style.top = `0px`
   setTimeout(() => {
     cropImage()
   }, 200)
