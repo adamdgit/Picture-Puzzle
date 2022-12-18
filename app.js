@@ -2,10 +2,10 @@ const tileCountEl = document.getElementById('tile-count')
 let TILE_COUNT = tileCountEl.value
 let COLUMNS = Math.sqrt(TILE_COUNT)
 let ROWS = Math.sqrt(TILE_COUNT)
+
 const editWrapper = document.querySelector('.image-edit-wrap')
-const gameSection = document.querySelector('.game-section')
-const editSection = document.querySelector('.edit-section')
 const startBtn = document.querySelector('.start-game-btn')
+const endIntroBtn = document.querySelector('.end-intro')
 const resizeBtn = document.querySelector('.resize')
 const timerSecs = document.getElementById('timer-secs')
 const timerMins = document.getElementById('timer-mins')
@@ -18,6 +18,12 @@ const resizedImg = document.getElementById('resized-image')
 const showHighscoresBtn = document.getElementById('show-btn')
 const hideHighscoresBtn = document.getElementById('hide-btn')
 const blankTile = 'blank'
+
+const step1 = document.querySelector('.step1')
+const step2 = document.querySelector('.step2')
+const step3 = document.querySelector('.step3')
+const step4 = document.querySelector('.step4')
+
 let width = 400
 let height = 400
 let tiles = []
@@ -34,20 +40,23 @@ if(window.innerWidth <= 600) {
   height = 350
 }
 
-// hide how to play section, show edit section
-document.querySelector('.intro button').addEventListener('click', () => {
-  document.querySelector('.intro').classList.add('hide-intro')
-  document.querySelector('.intro').classList.remove('intro')
-  document.querySelector('main').classList.add('show')
-  document.querySelector('main').style.pointerEvents = 'all'
-})
-
 insertHighscoreHTML()
+
+endIntroBtn.addEventListener('pointerdown', () => {
+  document.querySelector('.intro').style.display = 'none'
+  document.querySelector('main').style.display = 'grid'
+})
 
 // change tilecount on click
 tileCountEl.addEventListener('change', () => {
   changeTileCount()
 })
+// show next step after user chooses a board size
+tileCountEl.addEventListener('pointerdown', shownextsteponclick)
+function shownextsteponclick() {
+  showStep(step3)
+  tileCountEl.removeEventListener('pointerdown', shownextsteponclick)
+}
 
 // get user uploaded file and send to resize function
 fileIn.addEventListener('change', () => {
@@ -90,12 +99,15 @@ startBtn.addEventListener('pointerdown', () => {
   shuffleTiles(tiles)
   insertTilesHTML()
   startGame()
+  editWrapper.style.display = 'none'
+  step1.style.display = 'none'
+  step2.style.display = 'none'
+  step3.style.display = 'none'
 })
 
 function startGame() {
   // hide edit section, show game section
-  gameSection.style.opacity = '1'
-  editSection.style.display = 'none'
+  showStep(step4)
   resizedImg.style.display = "block"
   gameTimer()
   board.addEventListener('click', handleMouseClick)
@@ -133,6 +145,9 @@ function imageEditor() {
     document.addEventListener('pointermove', moveWindow)
     document.addEventListener('pointerup', setWindow)
   })
+  // show next step, show edit section
+  editWrapper.style.opacity = '1'
+  showStep(step2)
 }
 
 function moveWindow(e) {
@@ -163,6 +178,10 @@ function cropImage() {
   resizedImg.src = canvas.toDataURL()
   canvas.width = 0
   canvas.height = 0
+}
+
+function showStep(stepName) {
+  stepName.classList.add('show')
 }
 
 function drawTiles(img) {

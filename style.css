@@ -12,19 +12,15 @@ header {
 }
 
 main {
-  margin-top: 40px;
-  opacity: 0;
-  transition: 200ms opacity 300ms ease-out;
-  pointer-events: none;
-  padding-inline: 10px;
+  display: none;
+  gap: 2rem;
+  padding: 3rem 0;
 }
 
 button {
-  padding: 1rem 1.5rem;
+  padding: 10px 15px;
   cursor: pointer;
-  font-size: 1.3rem;
   border-radius: 6px;
-  border: 2px solid white;
   background: linear-gradient(171deg, white, #a1a1a1);
 }
 
@@ -32,39 +28,72 @@ button:hover {
   background: white;
 }
 
-.edit-section {
-  display: grid;
-  place-items: center;
-  gap: 1rem;
-  text-align: center;
-}
+/* How to play section */
 
-.game-section {
+.intro {
   display: grid;
-  place-items: center;
-  gap: 1rem;
-  transition: 200ms opacity 300ms ease-out;
-  opacity: 0;
-}
-
-.show {
+  justify-items: center;
+  font-size: 1.3rem;
+  margin: 0 auto;
+  padding: 2rem;
+  transition: opacity 400ms ease-in;
   opacity: 1;
+  width: 100%;
+  max-width: 900px;
 }
 
-.step {
-  font-size: 2rem;
-  color:rgb(97, 197, 255);
+.intro img {
+  width: 100%;
+  max-width: 400px;
+  min-width: 300px;
+  margin-bottom: 2rem;
 }
 
-.wrap1 {
+.hide-intro {
+  opacity: 0;
+  display: none;
+}
+
+.intro ul li {
+  text-align: left;
+  list-style: none;
+  margin: 20px 0;
+}
+
+
+/*-----Steps-----*/
+
+.step1 {
+  display: grid;
+  justify-items: center;
+  gap: 2rem;
+}
+
+.step2, .step3, .step4 {
+  display: grid;
+  justify-items: center;
+  opacity: 0;
+  gap: 1rem;
+  pointer-events: none;
+  transition: 400ms opacity 300ms ease;
+}
+
+.step2 {
   display: flex;
+  justify-content: center;
 }
 
-.wrap1 label {
-  margin: 0 10px;
+.step2.show, .step3.show, .step4.show {
+  opacity: 1;
+  pointer-events: all;
 }
 
-.wrap2 {
+.input-wrap {
+  display:flex; 
+  gap: 2rem;
+}
+
+.timer {
   display: flex;
   align-items: center;
   gap:10px;
@@ -108,14 +137,16 @@ button:hover {
 }
 
 .image-edit-wrap {
+  opacity: 0;
   display: grid;
+  margin: 0 auto;
   justify-items: center;
   align-items: center;
   position: relative;
   width: 400px;
   height: 400px;
   box-shadow: inset 0 0 10px black;
-  border: 4px solid red;
+  outline: 4px solid rgb(158, 42, 42);
   cursor: grab;
   overflow: hidden;
 }
@@ -171,42 +202,6 @@ button:hover {
   grid-template-columns: repeat(6, auto);
 }
 
-/* How to play section */
-.intro {
-  position: absolute;
-  top: 10vh;
-  left: 50%;
-  transform: translateX(-50%);
-  display: grid;
-  justify-items: center;
-  font-size: 1.3rem;
-  border: 3px solid #fff;;
-  padding: 2rem;
-  background-color: #222;
-  transition: opacity 400ms ease-in;
-  opacity: 1;
-  width: 100%;
-  max-width: 900px;
-}
-
-.intro img {
-  width: 100%;
-  max-width: 400px;
-  min-width: 300px;
-  margin-bottom: 2rem;
-}
-
-.hide-intro {
-  opacity: 0;
-  display: none;
-}
-
-.intro ul li {
-  text-align: left;
-  list-style: none;
-  margin: 20px 0;
-}
-
 .winMessage {
   position: absolute;
   font-size: 2rem;
@@ -233,6 +228,12 @@ button:hover {
 }
 
 @media screen and (max-width: 600px) {
+
+  main {
+    padding: 1rem 0;
+    text-align: center;
+  }
+
   div, img, a, ul, li {
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     -webkit-tap-highlight-color: transparent;
@@ -242,22 +243,26 @@ button:hover {
     -ms-user-select: none;
      user-select: none;
    }
+
   #board img {
     width: 70px;
     height: 70px;
   }
+
   .intro {
-    top:0;
-    left: unset;
-    transform: unset;
     font-size: 1.1rem;
-    padding: 10px;
+    padding: 2rem;
     border: unset;
     background-color: unset;
   }
 
-  .step {
-    font-size: 1.5rem;
+  .intro img {
+    width: 250px;
+    height: auto;
+  }
+
+  .input-wrap {
+    display: grid;
   }
 
   .image-edit-wrap {
@@ -267,7 +272,7 @@ button:hover {
   }
 
   #resized-image {
-    width: 350px;
-    height: 350px;
+    width: 250px;
+    height: 250px;
   }
 }

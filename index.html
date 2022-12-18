@@ -15,52 +15,52 @@
     <div class="intro">
       <h1>How to play:</h1>
       <ul>
-        <li>1. Choose a board size</li>
-        <li>2. Upload an image, move it within the red box to finalise your puzzle</li>
-        <li>3. Slide the tiles by clicking a tile adjacent to the blank tile (W,S,A,D keys also work)</li>
-        <li>4. Recreate your original image with the blank tile at the bottom right of the board</li>
-        <li>5. Try get the fastest time you can, good luck!</li>
+        <li>1. Slide the tiles by clicking/touching a tile adjacent to the blank tile or using the W,S,A,D keys.</li>
+        <li>2. Recreate your original image with the blank tile at the bottom right of the board</li>
+        <li>3. Try get the fastest time you can, good luck!</li>
       </ul>
       <img src="tutorial.gif" alt="GIF demonstrating how to slide a tile" width="400px" />
-      <button>Start</button>
+      <button class="end-intro">Ok, let's play</button>
     </div>
 
     <main>
-
-      <div class="edit-section">
-        <div class="wrap1">
-          <label for="tile-count"><span class="step">Choose board size:</span></label>
-          <select name="tile-count" id="tile-count">
-            <option value="16" selected>Easy - 4x4</option>
-            <option value="25">Medium - 5x5</option>
-            <option value="36">Hard - 6x6</option>
-          </select>
-        </div>
-        <span class="step">
-          Upload an image:
+      <div class="step1">
+        <span class="input-wrap">
+          <label for="ImgInp">Step 1: Select an image, square images are best</label>
           <input type="file" accept="image/*" id="imgInp" />
         </span>
-  
-        <span class="step">Move your image within the red box to set your final puzzle</span>
-        <div class="image-edit-wrap">
-          <img id="imgOut" src="" alt="user uploaded image" draggable="false"/>
-        </div>
-        <span class="resize-btns-wrap">
-          <button class="resize">Fit image to box</button>
-        </span>
+      </div>
 
+      <div class="step2">
+        <label for="tile-count">Step 2: Choose board size</label>
+        <select name="tile-count" id="tile-count">
+          <option value="16">Easy - 4x4</option>
+          <option value="25">Medium - 5x5</option>
+          <option value="36">Hard - 6x6</option>
+        </select>
+      </div>
+
+      <div class="image-edit-wrap">
+        <img id="imgOut" src="" alt="user uploaded image" draggable="false"/>
+      </div>
+
+      <div class="step3">
+        <p>Step 3: Click & drag the image to move it within the game board</p>
+        <button class="resize">Fit-image</button>
         <button class="start-game-btn">Start Game!</button>
       </div>
 
-      <div class="game-section">
+      <div class="step4">
+
+        <h2>Re-create your image</h2>
         <img id="resized-image" alt="resized user uploaded image"/>
         <canvas id="canvas"></canvas>
 
         <div id="board" class="grid-size16"></div>
   
-        <div class="wrap2">
-          <h2>Time:</h2> 
-          <h2 id="timer-mins">00</h2><h2>:</h2><h2 id="timer-secs">00</h2>
+        <div class="timer">
+          <p>Time:</p> 
+          <span id="timer-mins">00</span><span>:</span><span id="timer-secs">00</span>
           <button id="show-btn">Show Highscores</button>
           <div class="highscore-wrap hide">
             <span class="highscores">
@@ -71,6 +71,7 @@
             </span>
           </div>
         </div>
+
       </div>
       
     </main>
