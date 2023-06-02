@@ -1,8 +1,9 @@
-const tileCountEl = document.getElementById('tile-count')
-let TILE_COUNT = tileCountEl.value
+// Picture Puzzle - Adam Demol - 2022
+const TILE_COUNT = 16
 let COLUMNS = Math.sqrt(TILE_COUNT)
 let ROWS = Math.sqrt(TILE_COUNT)
 
+const restartButton = document.querySelector('#restart-btn')
 const editWrapper = document.querySelector('.image-edit-wrap')
 const startBtn = document.querySelector('.start-game-btn')
 const endIntroBtn = document.querySelector('.end-intro')
@@ -18,9 +19,9 @@ const resizedImg = document.getElementById('resized-image')
 const showHighscoresBtn = document.getElementById('show-btn')
 const hideHighscoresBtn = document.getElementById('hide-btn')
 const blankTile = 'blank'
+const highscoreEl = document.querySelector('.highscore-wrap')
 
 const step1 = document.querySelector('.step1')
-const step2 = document.querySelector('.step2')
 const step3 = document.querySelector('.step3')
 const step4 = document.querySelector('.step4')
 
@@ -47,17 +48,6 @@ endIntroBtn.addEventListener('pointerdown', () => {
   document.querySelector('main').style.display = 'grid'
 })
 
-// change tilecount on click
-tileCountEl.addEventListener('change', () => {
-  changeTileCount()
-})
-// show next step after user chooses a board size
-tileCountEl.addEventListener('pointerdown', shownextsteponclick)
-function shownextsteponclick() {
-  showStep(step3)
-  tileCountEl.removeEventListener('pointerdown', shownextsteponclick)
-}
-
 // get user uploaded file and send to resize function
 fileIn.addEventListener('change', () => {
   document.removeEventListener('click', (handleMouseClick))
@@ -72,13 +62,18 @@ fileIn.addEventListener('change', () => {
 
 // show/hide highscores
 showHighscoresBtn.addEventListener('pointerdown', () => {
-  const highscoreEl = document.querySelector('.highscore-wrap')
   highscoreEl.classList.remove('hide')
 })
 
 hideHighscoresBtn.addEventListener('pointerdown', () => {
-  const highscoreEl = document.querySelector('.highscore-wrap')
   highscoreEl.classList.add('hide')
+})
+
+restartButton.addEventListener('pointerdown', (e) => {
+  console.log(e)
+  // clear current board
+  // redraw board
+  // reset timer etc
 })
 
 resizeBtn.addEventListener('pointerdown', () => {
@@ -103,7 +98,6 @@ startBtn.addEventListener('pointerdown', () => {
   startGame()
   editWrapper.style.display = 'none'
   step1.style.display = 'none'
-  step2.style.display = 'none'
   step3.style.display = 'none'
 })
 
@@ -149,7 +143,7 @@ function imageEditor() {
   })
   // show next step, show edit section
   editWrapper.style.opacity = '1'
-  showStep(step2)
+  showStep(step3)
 }
 
 function moveWindow(e) {
@@ -297,9 +291,9 @@ function moveTile(element) {
   let validCol = blank % COLUMNS
   let validRow = Math.floor(blank / ROWS)
   let tileIndex = Number(element.dataset.index)
-  let [bool, direction] = validMove(blank, tileIndex, validCol, validRow)
+  let [isValidMove, direction] = validMove(blank, tileIndex, validCol, validRow)
   // return true or false if a selected tile is a valid move
-  if (bool === true) {
+  if (isValidMove === true) {
     // swap elements and update tiles array
     swapTiles(tileIndex, blank, direction)
     // check if the puzzle has been solved
