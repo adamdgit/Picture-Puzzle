@@ -31,15 +31,6 @@
         </span>
       </div>
 
-      <div class="step2">
-        <label for="tile-count">Step 2: Choose board size</label>
-        <select name="tile-count" id="tile-count">
-          <option value="16">Easy - 4x4</option>
-          <option value="25">Medium - 5x5</option>
-          <option value="36">Hard - 6x6</option>
-        </select>
-      </div>
-
       <div class="image-edit-wrap">
         <img id="imgOut" src="" alt="user uploaded image" draggable="false"/>
       </div>
@@ -62,9 +53,10 @@
           <p>Time:</p> 
           <span id="timer-mins">00</span><span>:</span><span id="timer-secs">00</span>
           <button id="show-btn">Show Highscores</button>
+          <button id="restart-btn">Restart</button>
           <div class="highscore-wrap hide">
             <span class="highscores">
-              <h2>Your Highscores!</h2>
+              <h3>Your Highscores!</h3>
               <div id="highscore-list">
               </div>
               <button id="hide-btn">Close</button>
