@@ -19,32 +19,39 @@
         <li>2. Recreate your original image with the blank tile at the bottom right of the board</li>
         <li>3. Try get the fastest time you can, good luck!</li>
       </ul>
-      <img src="tutorial.gif" alt="GIF demonstrating how to slide a tile" width="400px" />
+      <img src="images/tutorial.gif" alt="GIF demonstrating how to slide a tile" width="400px" />
       <button class="end-intro">Ok, let's play</button>
     </div>
 
     <main>
-      <div class="step1">
-        <span class="input-wrap">
-          <label for="ImgInp">Step 1: Select an image, square images are best</label>
-          <input type="file" accept="image/*" id="imgInp" />
-        </span>
+      <div class="difficulty">
+        <h2>Select Difficulty:</h2>
+        <div class="difficulty-wrap">
+          <div class="difficulty-item">
+            <span>Easy</span>
+            <img src="images/parot.jpg" alt="easy difficulty image" id="easy" height="200px" width="200px">
+            <img src="images/parot-small.jpg" alt="easy difficulty image" id="easy-sm" height="300px" width="300px">
+          </div>
+
+          <div class="difficulty-item">
+            <span>Medium</span>
+            <img src="images/zebra.jpg" alt="medium difficulty image" id="medium" height="200px" width="200px">
+            <img src="images/zebra-small.jpg" alt="medium difficulty image" id="medium-sm" height="300px" width="300px">
+          </div>
+
+          <div class="difficulty-item">
+            <span>Hard</span>
+            <img src="images/forest.jpg" alt="hard difficulty image" id="hard" height="200px" width="200px">
+            <img src="images/forest-small.jpg" alt="hard difficulty image" id="hard-sm" height="300px" width="300px">
+          </div>
+        </div>
+        <p>Images from <a href="https://unsplash.com/">unsplash</a>.</p>
       </div>
 
-      <div class="image-edit-wrap">
-        <img id="imgOut" src="" alt="user uploaded image" draggable="false"/>
-      </div>
+      <div class="selected-image"></div>
 
-      <div class="step3">
-        <p>Step 3: Click & drag the image to move it within the game board</p>
-        <button class="resize">Fit-image</button>
-        <button class="start-game-btn">Start Game!</button>
-      </div>
-
-      <div class="step4">
-
+      <div class="game-wrap">
         <h2>Re-create your image</h2>
-        <img id="resized-image" alt="resized user uploaded image"/>
         <canvas id="canvas"></canvas>
 
         <div id="board" class="grid-size16"></div>
@@ -52,18 +59,17 @@
         <div class="timer">
           <p>Time:</p> 
           <span id="timer-mins">00</span><span>:</span><span id="timer-secs">00</span>
-          <button id="show-btn">Show Highscores</button>
-          <button id="restart-btn">Restart</button>
-          <div class="highscore-wrap hide">
-            <span class="highscores">
-              <h3>Your Highscores!</h3>
-              <div id="highscore-list">
-              </div>
-              <button id="hide-btn">Close</button>
-            </span>
-          </div>
         </div>
 
+        <button class="show-btn">Show Highscores</button>
+        <div class="highscore-wrap hide">
+          <span class="highscores">
+            <h2>Your Highscores!</h2>
+            <ul class="highscore-list">
+            </ul>
+            <button class="hide-btn">Close</button>
+          </span>
+        </div>
       </div>
       
     </main>

@@ -1,7 +1,6 @@
 * { padding: 0; border: 0; margin: 0; box-sizing: border-box; }
 
 body {
-  font-family: Arial, Helvetica, sans-serif;
   background: #111;
   background: linear-gradient(320deg, black, #2b2b2b);
   color: #eee;
@@ -61,17 +60,39 @@ button:hover {
   margin: 20px 0;
 }
 
-
-/*-----Steps-----*/
-
-.step1 {
+.difficulty {
   display: grid;
-  justify-items: center;
-  gap: 2rem;
+  gap: 1rem;
+  text-align: center;
 }
 
-.step2, .step3, .step4 {
+.difficulty-wrap {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.selected-image {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+}
+
+.difficulty-item {
   display: grid;
+  gap: 1rem;
+  justify-items: center;
+}
+.difficulty-item img { 
+  transition: all 150ms ease-in-out; 
+  cursor: pointer;
+}
+.difficulty-item img:hover {
+  filter: grayscale();
+}
+
+.game-wrap {
+  display: none;
   justify-items: center;
   opacity: 0;
   gap: 1rem;
@@ -79,19 +100,10 @@ button:hover {
   transition: 400ms opacity 300ms ease;
 }
 
-.step2 {
-  display: flex;
-  justify-content: center;
-}
-
-.step2.show, .step3.show, .step4.show {
+.game-wrap.show {
+  display: grid;
   opacity: 1;
   pointer-events: all;
-}
-
-.input-wrap {
-  display:flex; 
-  gap: 2rem;
 }
 
 .timer {
@@ -102,7 +114,6 @@ button:hover {
 
 .highscore-wrap {
   display: grid;
-  place-items: center;
   position: fixed;
   inset: 0;
   background-color: rgba(0, 0, 0, 0.7);
@@ -111,77 +122,60 @@ button:hover {
 
 .highscores {
   display: grid;
-  gap: 3rem;
+  grid-template-rows: auto 1fr auto;
+  gap: 2rem;
   background-color: #333;
   border-radius: 10px;
-  padding: 2rem;
+  padding-block: 2rem;
+  height: fit-content;
   max-height: 90vh;
   overflow: auto;
   text-align: center;
+  width: 100%;
+  max-width: 750px;
+  margin: 2rem auto;
 }
 
-#highscore-list {
+.hide-btn {
+  width: 200px;
+  margin: 0 auto;
+}
+
+.highscore-list {
   display: grid;
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, 250px);
+  gap: 1.5rem;
+  justify-content: center;
   font-size: 1.4rem;
   list-style: none;
 }
 
-#highscore-list span {
+.highscore-list li {
   display: flex;
-  align-items: center;
   gap: 1rem;
+  align-items: center;
+  justify-content: center;
+  height: fit-content;
 }
 
 .hide {
  display: none;
 }
 
-.image-edit-wrap {
-  opacity: 0;
-  display: grid;
-  margin: 0 auto;
-  justify-items: center;
-  align-items: center;
-  position: relative;
-  width: 400px;
-  height: 400px;
-  box-shadow: inset 0 0 10px black;
-  outline: 4px solid rgb(158, 42, 42);
-  cursor: grab;
-  overflow: hidden;
-}
-
-#resized-image {
-  display: none;
-}
-
-#tile-count {
-  cursor: pointer;
-}
-
 #canvas {
   display: none;
 }
 
-#imgOut {
-  position: absolute;
-}
-
-#imgInp {
-  border: 1px solid white;
-}
-
 #board {
   display: grid;
+  grid-template-columns: repeat(4, auto);
   cursor: pointer;
   border:20px solid #fff;
-  border-radius: 10px;
   transition: border 50ms ease;
 }
 
 #board img {
-  transition: all 50ms ease;
+  transition: all 40ms ease;
 }
 
 @media screen and (max-width: 600px) {
@@ -189,18 +183,6 @@ button:hover {
     width: 70px;
     height: 70px;
   }
-}
-
-.grid-size16{
-  grid-template-columns: repeat(4, auto);
-}
-
-.grid-size25{
-  grid-template-columns: repeat(5, auto);
-}
-
-.grid-size36{
-  grid-template-columns: repeat(6, auto);
 }
 
 .winMessage {
@@ -223,15 +205,14 @@ button:hover {
   transform: translate(var(--x), var(--y));
 }
 
-#resized-image {
-  width: 400px;
-  height: 400px;
+#easy-sm, #medium-sm, #hard-sm {
+  display: none;
 }
 
 @media screen and (max-width: 600px) {
 
   main {
-    padding: 1rem 0;
+    padding: 0;
     text-align: center;
   }
 
@@ -242,7 +223,7 @@ button:hover {
     -khtml-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
-     user-select: none;
+    user-select: none;
    }
 
   #board img {
@@ -251,7 +232,7 @@ button:hover {
   }
 
   .intro {
-    font-size: 1.1rem;
+    font-size: 1rem;
     padding: 2rem;
     border: unset;
     background-color: unset;
@@ -266,14 +247,12 @@ button:hover {
     display: grid;
   }
 
-  .image-edit-wrap {
-    touch-action: none;
-    width: 350px;
-    height: 350px;
+  .difficulty {
+    margin-top: 2rem;
   }
 
-  #resized-image {
-    width: 250px;
-    height: 250px;
+  .difficulty-wrap {
+    display: flex;
+    flex-direction: column;
   }
 }
